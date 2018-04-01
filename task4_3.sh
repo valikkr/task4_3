@@ -25,7 +25,7 @@ mkdir -p $backup
 echo $backup "has been created"
 fi
 
-tar -cvvzf  $backup$nam"_"`date +%d-%m-%Y_%H_%M_%S`".tgz" $dir
+tar -cvvzf  $backup$nam"_"`date +%d-%m-%Y_%H_%M_%S`".tar.gz" $dir
 
 
 x=1

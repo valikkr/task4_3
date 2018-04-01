@@ -1,56 +1,44 @@
 #!/bin/bash
 dir=$1
 kol=$2
-date=`date +%d-%m-%Y_%H_%M`
-name=`$dir | cut -c 2- | sed 'y/\//\-/'`.`$date`.tar.gz
-
+backup="/tmp/backups/"
+nam=`echo ${dir}| cut -c 2- | tr '/' '-'`
+echo $nam
 if [ $# -ne 2 ]
-then 
+then
 {
 echo "Something wrong. Please enter two parameters."
 }
-exit 1
+exit
 fi
 
-if  [ -e "$dir" ] && [ "$kol" -gt 0 ]
-then 
-exit 0
-else
-echo "Something wrong. please enter full path directory and quantity of backups"
-exit 1
-
-fi
-
-if [ -d /tmp/backups ]
+if  ! [ -e "$dir" ] && ! [ "$kol" -gt 0 ]
 then
-exit 0
-else
-mkdir -p /tmp/backups
+echo "Something wrong. please enter full path directory and quantity of backups"
+exit
+fi
 
-backup=/tmp/backups
 
+if ! [ -d "$backup" ]
+then
+mkdir -p $backup
 echo $backup "has been created"
-#fi
+fi
+
+tar -cvvzf  $backup$nam"_"`date +%d-%m-%Y_%H_%M_%S`".tgz" $dir
 
 
+x=1
 
+filemask=$nam"_*.*"
 
-
-
-
-#tar -czvf $dir -C $backup $name
-
-
-
-#x=1
-
-#for i in `ls -t $dir/$name`
-#	do
-#if [ "$x" -le "$kol" ]
-#	then
-#	((x++))
-#	continue
-#	fi 
-#		rm $i
-#done
+for i in `ls -t $backup$filemask`
+        do
+          if [ $x -le $kol ]
+                then
+                ((x++))
+                continue
+          fi
+        rm $i
+done
 
